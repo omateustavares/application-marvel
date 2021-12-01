@@ -22,6 +22,7 @@ export const Header = styled.header`
   left: 0;
   top: 0;
   z-index: 3;
+  box-shadow: 0 3px 6px #00000029;
 
   @media (max-width: 768px) {
     padding-bottom: 16px;
@@ -91,6 +92,7 @@ export const Main = styled.main`
   display: flex;
   width: 100%;
   padding-top: 100px;
+  margin-bottom: 80px;
 
   @media (max-width: 768px) {
     padding-top: 90px;

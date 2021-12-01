@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import api from "./services/api";
 import logo from "./img/logo.svg";
 import { Header, Main } from "./styles/app";
+import Pagination from "./components/Pagination";
 
 type TypeList = {
   name: string;
@@ -25,6 +26,14 @@ type TypeList = {
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
   const [list, setList] = useState<TypeList>([]);
+
+  const [itensPerPage, setItemsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(0);
+  const startIndex = currentPage * itensPerPage;
+  const endIndex = startIndex + itensPerPage;
+  const currentItens = list.slice(startIndex, endIndex);
+
+  const pages = Math.ceil(list.length / itensPerPage);
 
   const getData = async () => {
     try {
@@ -74,7 +83,7 @@ function App() {
               {list.length === 0 ? (
                 <p>Carregando...</p>
               ) : (
-                list
+                currentItens
                   .filter((value) => {
                     if (
                       value.name
@@ -120,6 +129,11 @@ function App() {
           </div>
         </div>
       </Main>
+      <Pagination
+        pages={pages}
+        setCurrentPage={setCurrentPage}
+        currentPage={currentPage}
+      />
     </>
   );
 }

@@ -24,20 +24,16 @@ type TypeList = {
 }[];
 
 function App() {
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm] = useState("");
   const [list, setList] = useState<TypeList>([]);
 
-  const [itensPerPage, setItemsPerPage] = useState(10);
+  const [itensPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(0);
   const startIndex = currentPage * itensPerPage;
   const endIndex = startIndex + itensPerPage;
   const currentItens = list.slice(startIndex, endIndex);
 
   const pages = Math.ceil(list.length / itensPerPage);
-
-  setCurrentPage(10);
-  setItemsPerPage(10);
-  setSearchTerm("");
 
   const getData = async () => {
     try {

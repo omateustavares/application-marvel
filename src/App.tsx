@@ -52,8 +52,6 @@ function App() {
     }
   };
 
-  const handleInfo = () => {};
-
   useEffect(() => {
     getData();
   }, []);

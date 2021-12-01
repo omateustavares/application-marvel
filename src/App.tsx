@@ -35,6 +35,10 @@ function App() {
 
   const pages = Math.ceil(list.length / itensPerPage);
 
+  setCurrentPage(10);
+  setItemsPerPage(10);
+  setSearchTerm("");
+
   const getData = async () => {
     try {
       const data = await api

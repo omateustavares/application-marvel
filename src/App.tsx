@@ -3,6 +3,8 @@ import api from "./services/api";
 import logo from "./img/logo.svg";
 import { Header, Main } from "./styles/app";
 import Pagination from "./components/Pagination";
+import { useModal } from "./hooks/Modal";
+import { CharacterDetails } from "./components/Modal/CharacterDetails";
 
 type TypeList = {
   name: string;
@@ -24,7 +26,7 @@ type TypeList = {
 }[];
 
 function App() {
-  const [searchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [list, setList] = useState<TypeList>([]);
 
   const [itensPerPage] = useState(10);
@@ -34,6 +36,8 @@ function App() {
   const currentItens = list.slice(startIndex, endIndex);
 
   const pages = Math.ceil(list.length / itensPerPage);
+
+  const { open, close } = useModal();
 
   const getData = async () => {
     try {
@@ -50,7 +54,33 @@ function App() {
 
   useEffect(() => {
     getData();
+
+    const closeModal = (e) => {
+      if (e.keyCode === 27) {
+        document.body.classList.remove("is-hidden");
+        close();
+      }
+    };
+    window.addEventListener("keydown", closeModal);
+    return () => window.removeEventListener("keydown", closeModal);
   }, []);
+
+  const handleInfo = (item) => {
+    document.body.classList.add("is-hidden");
+    open({
+      content: (
+        <CharacterDetails
+          src={`${item.thumbnail.path}.${item.thumbnail.extension}`}
+          title={item.name}
+          description={item.description}
+          series={item.series}
+          comics={item.comics}
+          events={item.events}
+          urls={item.urls}
+        />
+      ),
+    });
+  };
 
   return (
     <>
@@ -72,7 +102,12 @@ function App() {
             <h1>Busca de personagens</h1>
             <label htmlFor="search">
               <span>Nome do personagem</span>
-              <input type="search" placeholder="Search" spellCheck="false" />
+              <input
+                type="search"
+                placeholder="Search"
+                onChange={(e) => setSearchTerm(e.target.value)}
+                spellCheck="false"
+              />
             </label>
           </div>
 
@@ -95,7 +130,7 @@ function App() {
                   .map((item) => {
                     return (
                       <li key={item.id}>
-                        <button type="button" onClick={() => console.log(item)}>
+                        <button type="button" onClick={() => handleInfo(item)}>
                           <div className="character">
                             <img
                               src={`${item.thumbnail.path}.${item.thumbnail.extension}`}
